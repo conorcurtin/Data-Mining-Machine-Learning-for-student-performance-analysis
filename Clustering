@@ -1,0 +1,46 @@
+library(tidyverse)
+library(ggthemes)
+library(reshape2)
+library(skimr)
+library(ggcorrplot)
+library(cluster)
+
+data <- read.csv("test_scores.csv", stringsAsFactors = TRUE)
+data
+
+df <- data %>%
+  mutate(y = ifelse(x == 0, "male", "female"))
+
+
+
+#data[data$gender=="Male"] <- 1
+#data[data$gender=="Female", "gender"] <- 2
+
+#data[] <- lapply(data, function(x) as.numeric(as.character(x)))
+
+str(data)
+#data$gender <- as.character(as.numeric(data$gender))
+
+data[data$gender, 0 == "Male"]
+#data[data$gender, "Female" == 1]
+
+personality <- Data[2:11]
+
+#Pre-test scores ~ school type / gender
+ggplot(personality, aes(x = school_type, y = pretest)) + 
+  geom_point(size = 1, color="black") +
+  geom_smooth(method = "lm") +
+  facet_wrap( ~ gender) +
+  theme_bw()
+
+#Post-test scores ~ school type/ gender
+ggplot(personality, aes(x = school_type, y = posttest)) + 
+  geom_point(size = 1, color="black") +
+  geom_smooth(method = "lm") +
+  facet_wrap( ~ gender) +
+  theme_bw()
+
+
+ggcorrplot(cor(Data[,3:5]), hc.order = TRUE, type = "lower", lab = F, 
+           outline.color = 4, p.mat = cor_pmat(Data[,3:5]), pch.cex = 7) +
+  labs(title = "Personality Correlation")
