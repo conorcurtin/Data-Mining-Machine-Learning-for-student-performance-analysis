@@ -1,0 +1,56 @@
+library(tidyverse)
+library(skimr)
+library(ggcorrplot)
+library(DT)
+library(ggplot2)
+library(plyr)
+library(readr)
+library(GGally)
+library(dplyr)
+library(mlbench)
+
+data <- read.csv("test_scores.csv", stringsAsFactors = TRUE)
+data
+
+#T-testing
+t.test(data$posttest ~ data$school_type)
+t.test(data$posttest ~ data$gender)
+t.test(data$posttest ~ data$pretest_result)
+
+#_______________________________________________________________________________
+#ANOVA 
+#One-way ANOVA #Has only been completed on post-test scores
+school_setting_posttest <- aov(posttest ~ school_setting, data = data)
+summary(school_setting_posttest)
+
+school_type_posttest <- aov(posttest ~ school_type, data = data)
+summary(school_type_posttest)
+
+gender_posttest <- aov(posttest ~ gender, data = data)
+summary(gender_posttest)
+
+pretest_posttest <- aov(posttest ~ pretest, data = data)
+summary(pretest_posttest)
+
+pretest_grade_posttest <- aov(posttest ~ pretest_grade, data = data)
+summary(pretest_grade_posttest)
+
+pretest_result_posttest <- aov(posttest ~ pretest_result, data = data)
+summary(pretest_result_posttest)
+
+#ANOVA TWOWAY TESTS (also called blocking variables)
+Anova_Twoway1 <- aov(pretest ~ posttest + posttest_result + posttest_grade, data = data)
+summary(Anova_Twoway1)
+
+#Check for homoscedasticity
+par(mfrow=c(2,2))
+plot(Anova_Twoway1)
+#_______________________________________________________________________________
+
+#Chi-Square Test
+chisq.test(data$posttest, data$school_type) 
+chisq.test(data$posttest, data$school_setting)
+chisq.test(data$posttest, data$gender)
+chisq.test(data$posttest, data$pretest)
+chisq.test(data$posttest, data$pretest_result)
+chisq.test(data$posttest, data$pretest_grade)
