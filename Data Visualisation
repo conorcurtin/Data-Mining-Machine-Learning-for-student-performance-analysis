@@ -1,0 +1,89 @@
+library(tidyverse)
+library(ggthemes)
+library(reshape2)
+library(skimr)
+library(ggcorrplot)
+library(cluster)
+library(pastecs)
+library(DT)
+library(ggplot2)
+
+data <- read.csv("test_scores.csv", stringsAsFactors = TRUE)
+data
+
+#Check for any NA Values
+any(is.na(data))
+#Descriptive Statistics#
+dim(data)
+#Data Size
+glimpse(data)
+str(data)
+#Summaries of Variables
+summary(data)
+skim(data)
+
+#Boxplot gender ~ pretest
+ggplot(data, aes(x = gender, y = pretest)) +
+  geom_boxplot(fill="light blue", color=1) +
+  coord_flip() +
+  theme_bw() +
+  labs(x = NULL)
+
+#Boxplot gender ~ posttest
+ggplot(data, aes(x = gender, y = posttest)) +
+  geom_boxplot(fill="light blue", color=1) +
+  coord_flip() +
+  theme_bw() +
+  labs(x = NULL)
+
+#Histogram pretest ~ school_setting
+ggplot(data, aes(x = pretest)) + 
+  geom_histogram(fill="light blue",color=1) +
+  facet_wrap( ~ school_setting) +
+  theme_bw()
+
+#Histogram posttest ~ school_setting
+ggplot(data, aes(x = posttest)) + 
+  geom_histogram(fill="light blue",color=1) +
+  facet_wrap( ~ school_setting) +
+  theme_bw()
+
+#Barchart pretest ~ school_type
+counts <- table(data$school_setting, data$pretest)
+barplot(counts,
+        xlab = "Pretest Grades", col=c("light blue","red", "orange"),
+  legend = rownames(counts))
+
+#Barchart pretest ~ school_type
+counts2 <- table(data$school_setting, data$posttest)
+barplot(counts2,
+        xlab = "Posttest Grades", col=c("light blue","RED", "orange"),
+        legend = rownames(counts2))
+
+#Barchart school type ~ pretest grade
+counts3 <- table(data$school_type, data$pretest_grade)
+barplot(counts3,
+          xlab = "Pretest Grades", col=c("light blue","dark blue"),
+          legend = rownames(counts3))
+
+#Barchart school type ~ posttest grade
+counts4 <- table(data$school_type, data$posttest_grade)
+barplot(counts4,
+        xlab = "Post Grade", col=c("light blue","dark blue"),
+        legend = rownames(counts4))
+
+
+
+#Personality Correlation
+ggcorrplot(cor(data[,1:9]), hc.order = TRUE, type = "lower", lab = F, 
+           outline.color = 4, p.mat = cor_pmat(data[,1:9]), pch.cex = 7) +
+  labs(title = "Data Correlation")
+
+
+
+
+
+
+
+
+
