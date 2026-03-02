@@ -1,0 +1,31 @@
+library(e1071)
+library(gmodels)
+library(tm)
+library(pROC)
+
+sms_raw <- read.csv("test_scores.csv", stringsAsFactors = FALSE)
+sms_raw
+
+sms_raw <- sms_raw[-13]
+sms_raw <- sms_raw[-9]
+sms_raw <- sms_raw[-7]
+sms_raw<- sms_raw[-6]
+sms_raw<- sms_raw[-5]
+sms_raw<- sms_raw[-4]
+sms_raw<- sms_raw[-1]
+sms_raw <- sms_raw[-7]
+sms_raw
+sms <- as.data.frame(sms_raw)
+sms
+sms_naive <- naiveBayes(posttest_grade ~., data = sms_raw)
+sms_naive
+#displays probability of each variable based on inputted value
+sms_naive1 <- naiveBayes(posttest_grade ~., data = sms_raw)
+sms_naive1
+
+sms_prediction <- predict(sms_naive, sms_raw$posttest_grade)
+CrossTable(sms_prediction)
+table(sms_prediction)
+sms_prediction
+
+
