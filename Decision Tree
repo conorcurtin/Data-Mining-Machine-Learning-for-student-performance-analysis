@@ -1,0 +1,95 @@
+
+posttest_grade_data <- read.csv("test_scores.csv", stringsAsFactors = TRUE)
+posttest_grade_data
+
+posttest_grade_data <- posttest_grade_data[-13]
+posttest_grade_data <- posttest_grade_data[-9]
+posttest_grade_data <- posttest_grade_data[-7]
+posttest_grade_data <- posttest_grade_data[-6]
+posttest_grade_data <- posttest_grade_data[-5]
+posttest_grade_data <- posttest_grade_data[-4]
+posttest_grade_data <- posttest_grade_data[-1]
+posttest_grade_data <- posttest_grade_data[-7]
+posttest_grade_data
+
+RNGversion("3.5.2") 
+set.seed(2133)
+
+sample_data <- sample(1500, 633)
+str(sample_data)
+
+# check the proportion of class variable
+prop.table(table(credit_train$posttest))
+prop.table(table(credit_test$posttest))
+
+#Training a model on the data
+# build the simplest decision tree
+library(C50)
+library(e1071)
+library(mlr)
+library(gmodels)
+
+#POSTTEST GRADE DONE
+credit_train <- posttest_grade_data[sample_data, ]
+credit_test <- posttest_grade_data[-sample_data, ]
+posttest_grade_model <- C5.0(credit_train[-7], credit_train$posttest_grade)
+posttest_grade_model
+credit_pred1 <- predict(posttest_grade_model, credit_test)
+summary(credit_pred1)
+plot(posttest_grade_model)
+CrossTable(credit_pred1, credit_test$posttest_grade)
+#82.1% accurate
+
+posttest_result_data <- read.csv("test_scores.csv", stringsAsFactors = TRUE)
+posttest_result_data <- posttest_result_data[-15]
+posttest_result_data <- posttest_result_data[-13]
+posttest_result_data <- posttest_result_data[-9]
+posttest_result_data <- posttest_result_data[-7]
+posttest_result_data <- posttest_result_data[-6]
+posttest_result_data <- posttest_result_data[-5]
+posttest_result_data <- posttest_result_data[-4]
+posttest_result_data <- posttest_result_data[-1]
+posttest_result_data
+
+#POSTTEST RESULT - DONE
+credit_train_result <- posttest_result_data[sample_data, ]
+credit_test_result <- posttest_result_data[-sample_data, ]
+posttest_result_model <- C5.0(credit_train_result[-7], credit_train_result$posttest_result)
+#training set without column 17 which is the default data
+#training set with default to try and predict against the default set
+posttest_result_model
+credit_pred <- predict(posttest_result_model, credit_test_result)
+plot(posttest_result_model)
+summary(credit_pred)
+CrossTable(credit_pred, credit_test_result$posttest_result)
+#99.86% accurate
+
+posttest__data <- read.csv("test_scores.csv", stringsAsFactors = TRUE)
+posttest__data <- posttest__data[-15]
+posttest__data <- posttest__data[-14]
+posttest__data <- posttest__data[-9]
+posttest__data <- posttest__data[-7]
+posttest__data <- posttest__data[-6]
+posttest__data <- posttest__data[-5]
+posttest__data <- posttest__data[-4]
+posttest__data <- posttest__data[-1]
+posttest__data
+#POSTTEST RESULT - DONE
+
+train <- posttest__data[sample_data, ]
+test <- posttest__data[-sample_data, ]
+#POSTTEST
+train$posttest<-as.factor(train$posttest)
+posttest_model <- C5.0(train[-7], test$posttest)
+credit_pred <- predict(posttest_model, test)
+posttest_model
+summary(posttest_model)
+plot(posttest_model)
+#45.5% accurate
+
+
+
+
+
+
+
